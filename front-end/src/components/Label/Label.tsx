@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 
 export default function Label(props) {
-    const estilo = {
+    const estilo: CSSProperties = {
         color: props.valorInvalido ? '#d50000' : '#444444'
     }
 
