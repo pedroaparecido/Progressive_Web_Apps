@@ -4,6 +4,10 @@ import Input from '../Input/Input.tsx'
 import GenderSelector from '../GenderSelector/GenderSelector.tsx'
 import Usuario from '../../models/Usuario.ts'
 import Button from '../Button/Button.tsx'
+import Toast from '../Toast/Toast.tsx'
+import ImageScroller from '../ImageScroller/ImageScroller.tsx'
+import Avatar from '../../models/Avatar.ts'
+import image from '../Image/img/avatars.png'
 
 class NovoUsuario extends React.Component <any, any> {
     constructor(props){
@@ -59,6 +63,7 @@ class NovoUsuario extends React.Component <any, any> {
         e.preventDefault()
         let usuario = this.state.usuario
         usuario.genero = genero
+        usuario.avatar = Avatar.obterTodos()[0]
         this.setState({
             usuario: usuario
         })
@@ -113,7 +118,11 @@ class NovoUsuario extends React.Component <any, any> {
                         texto="Voltar"
                         onClick={e => {
                             e.preventDefault()
+                            this.props.onSubmit(this.state.usuario)
+                            let usuario = this.state.usuario
+                            usuario.avatar = Avatar.obterTodos()[0]
                             this.setState({
+                                usuario: usuario,
                                 primeiraVisaoCompleta: false
                             })
                         }}
@@ -121,6 +130,10 @@ class NovoUsuario extends React.Component <any, any> {
                     <Button
                         principal
                         texto="Salvar"
+                        onClick={e => {
+                            e.preventDefault()
+                            this.props.onSubmit(this.state.usuario)
+                        }}
                     />
                 </section>
             )
@@ -137,12 +150,40 @@ class NovoUsuario extends React.Component <any, any> {
         }
     }
 
+    renderizarAvatar() {
+        if (this.state.primeiraVisaoCompleta) {
+            return(
+                <section>
+                    <Label
+                        texto="Escolha seu avatar"
+                    />
+                    <ImageScroller
+                        arquivo={image}
+                        eixoY={(this.state.usuario.genero == 'm' ? 0 : 1)}
+                        elementos={Avatar.obterTodos()}
+                        selecionado={this.state.usuario.avatar}
+                        onChange={avatar => {
+                            let usuario = this.state.usuario
+                            usuario.avatar = avatar
+                            this.setState({
+                                usuario: usuario
+                            })
+                        }}
+                    />
+                </section>
+            )
+        } else  {
+            return null
+        }
+    }
+
     render() {
         return(
             <div className="center">
                 <form className="pure-form pure-form-stacked">
                     {this.renderizarNome()}
                     {this.renderizarGenero()}
+                    {this.renderizarAvatar()}
                     {this.renderizarBotoes()}
                 </form>
             </div>

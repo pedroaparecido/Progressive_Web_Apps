@@ -1,0 +1,10 @@
+{
+    "production": {
+        "output": {
+            "appCache": {
+                "enable": true,
+                "path": "cache.appcache"
+            }
+        }
+    }
+}
